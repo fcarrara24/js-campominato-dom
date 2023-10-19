@@ -1,0 +1,29 @@
+#field{
+    width: 40vw;
+    height: 40vw;
+    background-color: greenyellow;
+}
+
+.square{
+    background-color: greenyellow;
+    border-radius: 2px;
+    border: 1px solid black;
+    
+}
+
+span{
+    text-align: center;
+    
+}
+
+.centered{
+    padding: 25%;
+    text-align: center;
+}
+
+.circled{
+    background-color: greenyellow!important;
+    background-color: transparent;
+    border: 5px solid red;
+    border-radius: 50%;
+}
