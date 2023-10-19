@@ -29,9 +29,10 @@ gameBtn.addEventListener('click', function newGame() {
 
     let firstClick = true;
     let win = false;
-    let matrixMines = [];
+    //passiamo 16 mine
+    let totalMines = 16;
+    let matrixMines = mineMatrixAssigner(totalMines)
     let displayed = [];
-    let totalMines = 0;
     let totalDisplayed = 0;
 
     for (let i = 0; i < width; i++) {
@@ -41,18 +42,16 @@ gameBtn.addEventListener('click', function newGame() {
 
             table.innerHTML += `<div class="square" style="width: ${99 / width}%; height: ${99 / width}%;"></div>`
             let unknown = trueMine();
-            totalMines += unknown;
             let disp = false;
             //pushed for html
             displayedLine.push(disp);
-            //tracking all mines
-            matrixMinesLine.push(unknown);
+
         }
 
         displayed.push(displayedLine);
-        matrixMines.push(matrixMinesLine);
+
     }
-    console.log(totalMines)
+
     //getting all the squares
 
     const printSquare = document.getElementsByClassName('square');
@@ -62,13 +61,6 @@ gameBtn.addEventListener('click', function newGame() {
             //left-click handler
             printSquare[i * width + j].addEventListener('click', (event) => {
                 printSquare[i * width + j].classList.remove('circled');
-                if (firstClick) {
-                    if (matrixMines[i][j]) {
-                        totalMines = totalMines - 1;
-                    }
-                    matrixMines[i][j] = false;
-                    firstClick = false;
-                }
                 if (matrixMines[i][j] && !win) {
                     alert('hai perso');
                     location.reload();
@@ -179,15 +171,44 @@ gameBtn.addEventListener('click', function newGame() {
         return (x >= 0 && y >= 0 && x < width && y < width);
     }
 
-    /**
-     * function to guess active mine
-     * @returns 
-     */
-    function trueMine() {
-        if (rndInt(1, 8) === 1) {
-            return true;
+    function mineMatrixAssigner(totalMines) {
+        //output matrix
+        let out = [];
+        //array to handle data
+        let array = [];
+        while (out.length < totalMines) {
+            extractedTile = rndInt(0, width * width - 1)
+            console.log('step 1');
+            if (!array.includes(extractedTile)) {
+                array.push(extractedTile);
+            }
         }
-        return false;
+        console.log('step 2')
+        out = arrayToMatrix(array);
+        console.log('step 5');
+        return out;
+    }
+
+    function arrayToMatrix(array) {
+        console.log('step 3');
+        let checkCounter = 0;
+        outMatrix = [];
+        for (let i = 0; i < width; i++) {
+            let outMatrixRow = [];
+            for (j = 0; j < width; j++) {
+                //checking if number already there
+                if (array.includes(i * width + j)) {
+                    //if there i push true to handle mines
+                    outMatrixRow.push(true);
+                    checkCounter++;
+                } else {
+                    outMatrixRow.push(false);
+                }
+            }
+            outMatrix.push(outMatrixRow);
+        }
+        console.log('contatore di prova ' + checkCounter)
+        return outMatrix;
     }
     /**
      * random integer
