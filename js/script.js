@@ -30,7 +30,7 @@ gameBtn.addEventListener('click', function newGame() {
     let firstClick = true;
     let win = false;
     //passiamo 16 mine
-    let totalMines = 2;
+    let totalMines = 16;
     let matrixMines = mineMatrixAssigner(totalMines)
     let displayed = [];
     let totalDisplayed = 0;
@@ -61,8 +61,22 @@ gameBtn.addEventListener('click', function newGame() {
             printSquare[i * width + j].addEventListener('click', (event) => {
                 printSquare[i * width + j].classList.remove('circled');
                 if (matrixMines[i][j] && !win) {
+                    let arrayTotale = document.getElementsByClassName('square');
+                    for (let x = 0; x < width; x++) {
+                        for (let y = 0; y < width; y++) {
+                            if (matrixMines[x][y]) {
+                                arrayTotale[x * width + y].classList.remove('circled');
+                                arrayTotale[x * width + y].classList.add('bomb')
+                                arrayTotale[x * width + y].innerHTML = `<i class="fa-solid fa-bomb fa-bounce"></i>`
+                                console.log('mines')
+                            }
+                        }
+                    }
+                    setTimeout(() => {
+                        reload();
+                    }, 3000);
                     alert('hai perso');
-                    reload();
+
 
                 } else {
                     crash(i, j, true);
@@ -109,9 +123,9 @@ gameBtn.addEventListener('click', function newGame() {
                     for (let y = 0; y < width; y++) {
                         if (matrixMines[x][y]) {
                             arrayTotale[x * width + y].classList.remove('circled');
-                            arrayTotale[x * width + y].classList.add('bomb')
-                            arrayTotale[x * width + y].innerHTML =
-                                console.log('mines')
+                            arrayTotale[x * width + y].classList.add('win')
+                            arrayTotale[x * width + y].innerHTML = `<i class="fa-solid fa-trophy fa-beat-fade" style="color: #d6cf00;"></i>`
+                            console.log('mines')
                         }
                     }
                 }
