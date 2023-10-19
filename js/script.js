@@ -30,7 +30,7 @@ gameBtn.addEventListener('click', function newGame() {
     let firstClick = true;
     let win = false;
     //passiamo 16 mine
-    let totalMines = 5;
+    let totalMines = 2;
     let matrixMines = mineMatrixAssigner(totalMines)
     let displayed = [];
     let totalDisplayed = 0;
@@ -41,7 +41,6 @@ gameBtn.addEventListener('click', function newGame() {
         for (let j = 0; j < width; j++) {
 
             table.innerHTML += `<div class="square" style="width: ${99 / width}%; height: ${99 / width}%;"></div>`
-            let unknown = matrixMines[i][j];
             let disp = false;
             //pushed for html
             displayedLine.push(disp);
@@ -63,7 +62,7 @@ gameBtn.addEventListener('click', function newGame() {
                 printSquare[i * width + j].classList.remove('circled');
                 if (matrixMines[i][j] && !win) {
                     alert('hai perso');
-                    location.reload();
+                    reload();
 
                 } else {
                     crash(i, j, true);
@@ -73,7 +72,6 @@ gameBtn.addEventListener('click', function newGame() {
             printSquare[i * width + j].addEventListener('contextmenu', (event) => {
                 if (event.button == 2) {
                     event.preventDefault();
-                    console.log('mamma' + printSquare[i * width + j].innerHTML)
                     if (printSquare[i * width + j].innerHTML === '' || printSquare[i * width + j].innerHTML === ' ' || printSquare[i * width + j].innerHTML === '<div class="centered"></div>') {
                         printSquare[i * width + j].classList.toggle('circled');
                     }
@@ -106,9 +104,21 @@ gameBtn.addEventListener('click', function newGame() {
             totalDisplayed = totalDisplayed + 1;
             //win condition
             if (totalMines === (width * width - totalDisplayed)) {
+                let arrayTotale = document.getElementsByClassName('square');
+                for (let x = 0; x < width; x++) {
+                    for (let y = 0; y < width; y++) {
+                        if (matrixMines[x][y]) {
+                            arrayTotale[x * width + y].classList.remove('circled');
+                            arrayTotale[x * width + y].classList.add('bomb')
+                            arrayTotale[x * width + y].innerHTML =
+                                console.log('mines')
+                        }
+                    }
+                }
                 //toggles off mines
                 win = true;
-                document.getElementById('win').innerHTML = '<button class="btn btn-primary" onclick="reload()">hai vinto, premi per una nuova partita</button>'
+                console.log('hai vinto ');
+                //document.getElementById('win').innerHTML = '<button class="btn btn-primary" onclick="reload()">hai vinto, premi per una nuova partita</button>'
 
             }
         }
@@ -179,20 +189,16 @@ gameBtn.addEventListener('click', function newGame() {
         let array = [];
         while (array.length < totalMines || maxineraction === 0) {
             extractedTile = rndInt(0, width * width - 1)
-            console.log('step 1');
             if (!array.includes(extractedTile)) {
                 array.push(extractedTile);
             }
             maxineraction--;
         }
-        console.log('step 2')
         out = arrayToMatrix(array);
-        console.log('step 5');
         return out;
     }
 
     function arrayToMatrix(array) {
-        console.log('step 3');
         let checkCounter = 0;
         outMatrix = [];
         for (let i = 0; i < width; i++) {
