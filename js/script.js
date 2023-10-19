@@ -30,18 +30,18 @@ gameBtn.addEventListener('click', function newGame() {
     let firstClick = true;
     let win = false;
     //passiamo 16 mine
-    let totalMines = 16;
+    let totalMines = 5;
     let matrixMines = mineMatrixAssigner(totalMines)
     let displayed = [];
     let totalDisplayed = 0;
 
     for (let i = 0; i < width; i++) {
-        let matrixMinesLine = [];
+
         let displayedLine = [];
         for (let j = 0; j < width; j++) {
 
             table.innerHTML += `<div class="square" style="width: ${99 / width}%; height: ${99 / width}%;"></div>`
-            let unknown = trueMine();
+            let unknown = matrixMines[i][j];
             let disp = false;
             //pushed for html
             displayedLine.push(disp);
@@ -175,13 +175,15 @@ gameBtn.addEventListener('click', function newGame() {
         //output matrix
         let out = [];
         //array to handle data
+        let maxineraction = 1000;
         let array = [];
-        while (out.length < totalMines) {
+        while (array.length < totalMines || maxineraction === 0) {
             extractedTile = rndInt(0, width * width - 1)
             console.log('step 1');
             if (!array.includes(extractedTile)) {
                 array.push(extractedTile);
             }
+            maxineraction--;
         }
         console.log('step 2')
         out = arrayToMatrix(array);
