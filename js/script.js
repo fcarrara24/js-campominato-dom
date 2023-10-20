@@ -38,6 +38,7 @@ gameBtn.addEventListener('click', function newGame() {
     let displayed = [];
     let totalDisplayed = 0;
 
+    //printing to screen all the tiles
     for (let i = 0; i < width; i++) {
 
         let displayedLine = [];
@@ -58,13 +59,19 @@ gameBtn.addEventListener('click', function newGame() {
 
     const printSquare = document.getElementsByClassName('square');
 
+    //adding event listener to each tile
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < width; j++) {
-            //left-click handler
+
+            //                      //
+            //  left click handler  //
+            //                      //
             printSquare[i * width + j].addEventListener('click', function leftclick() {
                 printSquare[i * width + j].classList.remove('circled');
+                // clicking on a bomb
+                let arrayTotale = document.getElementsByClassName('square');
                 if (matrixMines[i][j] && !win) {
-                    let arrayTotale = document.getElementsByClassName('square');
+
                     for (let x = 0; x < width; x++) {
                         for (let y = 0; y < width; y++) {
                             if (matrixMines[x][y]) {
@@ -84,13 +91,22 @@ gameBtn.addEventListener('click', function newGame() {
                         gameBtn.click();
                     }, 2000);
 
-                } else if (!lost) {
+                }
+                //safe tiles clic & not in the 2000ms timeout for loss && prevented bug of freeing an already empity cell
+                else if (!lost && (arrayTotale[i * width + j].innerText === '' || arrayTotale[i * width + j].classList.contains('circled'))) {
+
                     crash(i, j, true);
                 }
+
             })
-            //right-click handler
+
+
+            //                      //
+            //  right-click handler //
+            //                      //
             printSquare[i * width + j].addEventListener('contextmenu', (event) => {
                 if (event.button == 2) {
+                    //removing right click basic action
                     event.preventDefault();
                     if (printSquare[i * width + j].innerHTML === '' || printSquare[i * width + j].innerHTML === ' ' || printSquare[i * width + j].innerHTML === '<div class="centered"></div>') {
                         printSquare[i * width + j].classList.toggle('circled');
@@ -110,6 +126,7 @@ gameBtn.addEventListener('click', function newGame() {
      * @returns 
      */
     function crash(x, y, notLast) {
+        //adjusted logic displayed matrix, so the object is considered shown
         displayed[x][y] = true;
 
         if (!matrixMines[x][y]) {
@@ -122,6 +139,8 @@ gameBtn.addEventListener('click', function newGame() {
 
             //keep track of displayed mines for win-counter
             totalDisplayed = totalDisplayed + 1;
+
+
             //win condition
             if (totalMines === (width * width - totalDisplayed)) {
                 let arrayTotale = document.getElementsByClassName('square');
@@ -202,6 +221,11 @@ gameBtn.addEventListener('click', function newGame() {
         return (x >= 0 && y >= 0 && x < width && y < width);
     }
 
+    /**
+     * distribute all the mines in different position inside of the logic matrix mines
+     * @param {*} totalMines 
+     * @returns a boolean matrix; true = bomb, false = free
+     */
     function mineMatrixAssigner(totalMines) {
         //output matrix
         let out = [];
