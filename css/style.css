@@ -4,6 +4,11 @@
     background-color: greenyellow;
 }
 
+#btnContainer{
+    left: 50vw;
+    transform: translate(-50%, 0);
+}
+
 .square{
     background-color: greenyellow;
     border-radius: 2px;

@@ -14,10 +14,16 @@
 </head>
 
 <body>
-    <label for="difficulty" id="difficultyShow">facile</label>
-    <input id="difficulyRange" name="difficulty" type="range" min="8" max="10" step="1" value="10">
+    <div class="d-flex flex-row justify-content-center p-3">
+        <label for="difficulty" id="difficultyShow">facile</label>
+        <input id="difficulyRange" name="difficulty" type="range" min="8" max="10" step="1" value="10">
 
-    <class id="generate" class="btn btn-primary">Genera o Ricarica</class>
+    </div>
+    <div id="btnContainer" class="d-flex flex-row justify-content-center position-absolute ">
+        <class id="generate" class="btn btn-primary">Genera o Ricarica</class>
+
+    </div>
+
 
     <div class="container d-flex justify-content-center align-content-center p-5">
         <div class="card d-flex flex-row flex-wrap justify-content-center align-content-center" id="field">

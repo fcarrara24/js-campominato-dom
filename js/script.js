@@ -2,7 +2,7 @@
 const gameBtn = document.getElementById('generate')
 const rangeListener = document.getElementById('difficulyRange');
 let loadedPage = false
-
+let lost;
 /**
  * label listener for changing difficulty
  */
@@ -15,19 +15,22 @@ rangeListener.addEventListener('input', function () {
 
 
 gameBtn.addEventListener('click', function newGame() {
+    let punteggio = 0;
     const table = document.getElementById('field');
     // recharge page if clicking twice on the btn
     if (loadedPage) {
         reload();
     }
+    gameBtn.classList.remove('d-none');
+
     //1st execution
     loadedPage = true;
     let width
     width = document.getElementById('difficulyRange').value;
-    console.log(width)
+
     //creating the table
 
-    let firstClick = true;
+    lost = false;
     let win = false;
     //passiamo 16 mine
     let totalMines = 16;
@@ -58,27 +61,30 @@ gameBtn.addEventListener('click', function newGame() {
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < width; j++) {
             //left-click handler
-            printSquare[i * width + j].addEventListener('click', (event) => {
+            printSquare[i * width + j].addEventListener('click', function leftclick() {
                 printSquare[i * width + j].classList.remove('circled');
                 if (matrixMines[i][j] && !win) {
                     let arrayTotale = document.getElementsByClassName('square');
                     for (let x = 0; x < width; x++) {
                         for (let y = 0; y < width; y++) {
                             if (matrixMines[x][y]) {
+
                                 arrayTotale[x * width + y].classList.remove('circled');
                                 arrayTotale[x * width + y].classList.add('bomb')
                                 arrayTotale[x * width + y].innerHTML = `<i class="fa-solid fa-bomb fa-bounce"></i>`
-                                console.log('mines')
                             }
                         }
                     }
+                    console.log('punteggio ' + totalDisplayed)
+                    //preventing click on other lines
+                    lost = true;
+                    gameBtn.classList.add('d-none');
                     setTimeout(() => {
                         reload();
-                    }, 3000);
-                    alert('hai perso');
+                        gameBtn.click();
+                    }, 2000);
 
-
-                } else {
+                } else if (!lost) {
                     crash(i, j, true);
                 }
             })
@@ -125,13 +131,12 @@ gameBtn.addEventListener('click', function newGame() {
                             arrayTotale[x * width + y].classList.remove('circled');
                             arrayTotale[x * width + y].classList.add('win')
                             arrayTotale[x * width + y].innerHTML = `<i class="fa-solid fa-trophy fa-beat-fade" style="color: #d6cf00;"></i>`
-                            console.log('mines')
                         }
                     }
                 }
+                console.log('punteggio ' + totalDisplayed + ' hai vinto ')
                 //toggles off mines
                 win = true;
-                console.log('hai vinto ');
                 //document.getElementById('win').innerHTML = '<button class="btn btn-primary" onclick="reload()">hai vinto, premi per una nuova partita</button>'
 
             }
@@ -144,7 +149,9 @@ gameBtn.addEventListener('click', function newGame() {
                     // since the interacted part is already displayed, I don't have to put a condition like (i!===0 || j!===0)
                     if (inBounds(x + i, y + j) && !displayed[x + i][y + j]) {
                         //if assoign points is not 0, means that this is the last interaction (else it will reveal mines)
+
                         crash(x + i, y + j, assignPoints(x + i, y + j) === 0)
+                        punteggio++;
                     }
 
                 }
@@ -229,7 +236,6 @@ gameBtn.addEventListener('click', function newGame() {
             }
             outMatrix.push(outMatrixRow);
         }
-        console.log('contatore di prova ' + checkCounter)
         return outMatrix;
     }
     /**
@@ -243,6 +249,6 @@ gameBtn.addEventListener('click', function newGame() {
     }
 
     function reload() {
-        table.innerHTML = ''
+        table.innerHTML = '';
     }
 });
